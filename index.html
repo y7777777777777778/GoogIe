@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Google</title>
+  <link rel="icon" href="https://www.google.com/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#fff; --text:#202124; --muted:#f8f9fa; --border:#dfe1e5; --blue:#1a73e8; --blue-d:#1558b0;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:var(--bg)}
+
+    /* Google風トップ */
+    .main{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+    .logo img{width:272px;height:auto}
+    .search{
+      display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:24px;padding:10px 14px;width:min(560px,92vw)
+    }
+    .search input{flex:1;border:none;outline:none;font-size:16px}
+    .btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .gbtn{background:var(--muted);border:1px solid var(--muted);border-radius:4px;padding:10px 16px;font-size:14px;cursor:pointer}
+    .gbtn:hover{border-color:#dadce0}
+
+    /* 隠しメニュー */
+    .hidden{display:none;min-height:100vh;display:flex;flex-direction:column}
+    .panel{padding:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:center;background:#f1f3f4;border-bottom:1px solid #e0e0e0}
+    .pill{padding:10px 16px;border:none;border-radius:999px;background:var(--blue);color:#fff;font-size:14px;cursor:pointer}
+    .pill.secondary{background:#e8eaed;color:#1f1f1f}
+    .pill.secondary:hover{background:#dfe1e5}
+    .pill:hover{background:var(--blue-d)}
+    .subpanel{display:none;gap:8px;flex-wrap:wrap;justify-content:center;padding:8px 12px;background:#fafafa;border-bottom:1px solid #eee}
+    .subpanel.show{display:flex}
+    iframe{flex:1;border:none;width:100%}
+
+    /* ヒント */
+    .hint{font-size:12px;color:#5f6368}
+  </style>
+</head>
+<body>
+  <!-- Google風トップ -->
+  <section id="top" class="main">
+    <div class="logo">
+      <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" />
+    </div>
+    <div class="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#5f6368" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input id="q" placeholder="Google 検索または URL を入力" autocomplete="off" />
+    </div>
+    <div class="btns">
+      <button class="gbtn" id="searchBtn">Google 検索</button>
+      <div class="hint">ヒント: 隠しワード「<code>roguinn</code>」でメニューが開きます</div>
+    </div>
+  </section>
+
+  <!-- 隠しメニュー -->
+  <section id="hidden" class="hidden" style="display:none;">
+    <div class="panel">
+      <button class="pill secondary" id="backBtn">戻る</button>
+      <button class="pill" id="chatBtn">ひまチャット</button>
+      <button class="pill" id="dmBtn">規制対策</button>
+      <button class="pill" id="proxyBtn">ブロ解</button>
+    </div>
+
+    <!-- ブロ解（プロキシ選択サブメニュー） -->
+    <div id="proxySub" class="subpanel">
+      <!-- 好きな数だけ増減可能。URLを差し替えてください -->
+      <button class="pill secondary" data-proxy="A">プロキシA</button>
+      <button class="pill secondary" data-proxy="B">プロキシB</button>
+      <button class="pill secondary" data-proxy="C">プロキシC</button>
+    </div>
+
+    <!-- 表示領域（履歴には残らない） -->
+    <iframe id="frame" src="" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-popups"></iframe>
+  </section>
+
+  <script>
+    // ====== 設定（ここだけあなたのURLに差し替え） =========================
+    const CHAT_URL = "https://himachat.jp/"; // 例: https://chat-u5k5.onrender.com/
+    const DM_URL   = "https://khp.jp/konamikan/4/";   // 例: https://six1chat.onrender.com/
+
+    // プロキシ一覧（ボタン名と対応させる）
+    const PROXIES = {
+      A: "https://proxy-a.example.com/",          // 例: https://thickofit.moldeo.org/
+      B: "https://proxy-b.example.com/",          // 例: https://light.6nenn.patrickwrede.com/
+      C: "https://proxy-c.example.com/"           // 例: https://benkyou.ycare.org/
+    };
+    // =====================================================================
+
+    const topView = document.getElementById("top");
+    const hiddenView = document.getElementById("hidden");
+    const input = document.getElementById("q");
+    const searchBtn = document.getElementById("searchBtn");
+    const backBtn = document.getElementById("backBtn");
+    const chatBtn = document.getElementById("chatBtn");
+    const dmBtn = document.getElementById("dmBtn");
+    const proxyBtn = document.getElementById("proxyBtn");
+    const proxySub = document.getElementById("proxySub");
+    const frame = document.getElementById("frame");
+
+    function openHidden() {
+      topView.style.display = "none";
+      hiddenView.style.display = "flex";
+      frame.src = ""; // クリーンに
+      proxySub.classList.remove("show");
+    }
+    function closeHidden() {
+      hiddenView.style.display = "none";
+      topView.style.display = "flex";
+      frame.src = "";
+      proxySub.classList.remove("show");
+    }
+
+    function googleSearch(q){
+      // 通常検索は普通に遷移（これは履歴に残るのが自然な仕様）
+      location.href = "https://www.google.com/search?q=" + encodeURIComponent(q);
+    }
+
+    function loadInIframe(url){
+      // iframe内のみで遷移 → ブラウザ履歴は汚さない
+      frame.src = url;
+    }
+
+    // 入力確定時の動作
+    function handleQuery(){
+      const v = input.value.trim();
+      input.value = "";
+      if (!v) return;
+
+      if (v.toLowerCase() === "roguinn") {
+        openHidden();
+      } else {
+        googleSearch(v);
+      }
+    }
+
+    // イベント紐付け
+    searchBtn.addEventListener("click", handleQuery);
+    input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") handleQuery(); });
+
+    backBtn.addEventListener("click", closeHidden);
+    chatBtn.addEventListener("click", ()=>{ loadInIframe(CHAT_URL); proxySub.classList.remove("show"); });
+    dmBtn.addEventListener("click",   ()=>{ loadInIframe(DM_URL);   proxySub.classList.remove("show"); });
+    proxyBtn.addEventListener("click",()=>{ proxySub.classList.toggle("show"); });
+
+    // プロキシ選択（委譲）
+    proxySub.addEventListener("click",(e)=>{
+      const btn = e.target.closest("[data-proxy]");
+      if(!btn) return;
+      const key = btn.getAttribute("data-proxy");
+      const url = PROXIES[key];
+      if(url){ loadInIframe(url); }
+    });
+
+    // タブが非表示化されたら戻る（必要なければ削除OK）
+    document.addEventListener("visibilitychange", ()=>{
+      if(document.hidden) closeHidden();
+    });
+  </script>
+</body>
+</html>
