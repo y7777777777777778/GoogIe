@@ -2,177 +2,145 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>Google風サイト</title>
+  <title>Google</title>
+  <link rel="icon" href="https://www.google.com/favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
       background: #fff;
       color: #202124;
-    }
-    header, footer {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 20px;
-      font-size: 14px;
-    }
-    header a, footer a {
-      text-decoration: none;
-      color: #202124;
-      margin: 0 8px;
-    }
-    .main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 15vh;
+      text-align: center;
     }
     .logo {
-      font-size: 64px;
+      margin-top: 120px;
+      font-size: 80px;
       font-weight: bold;
       color: #4285f4;
     }
+    .logo span:nth-child(2) { color: #ea4335; }
+    .logo span:nth-child(3) { color: #fbbc05; }
+    .logo span:nth-child(4) { color: #4285f4; }
+    .logo span:nth-child(5) { color: #34a853; }
+    .logo span:nth-child(6) { color: #ea4335; }
+
     .search-box {
-      margin-top: 30px;
+      margin: 30px auto;
+      width: 90%;
+      max-width: 600px;
       display: flex;
       align-items: center;
       border: 1px solid #dfe1e5;
       border-radius: 24px;
-      width: 560px;
-      padding: 8px 14px;
+      padding: 5px 15px;
+      box-shadow: none;
     }
     .search-box input {
       flex: 1;
       border: none;
-      font-size: 16px;
       outline: none;
-    }
-    .buttons {
-      margin-top: 20px;
-    }
-    .buttons button {
-      padding: 10px 16px;
-      margin: 5px;
-      font-size: 14px;
-      background: #f8f9fa;
-      border: 1px solid #dadce0;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .iframe-container {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #fff;
-      flex-direction: column;
-      z-index: 999;
-    }
-    .menu {
-      display: flex;
-      gap: 10px;
+      font-size: 16px;
       padding: 10px;
-      background: #f1f1f1;
-      justify-content: center;
     }
-    .menu button {
-      padding: 8px 16px;
+    .search-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 14px;
+      border: 1px solid #f8f9fa;
+      border-radius: 4px;
+      background: #f8f9fa;
       cursor: pointer;
     }
-    iframe {
-      flex: 1;
-      border: none;
-      width: 100%;
+    .search-btn:hover {
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
     }
-    footer {
-      position: fixed;
-      bottom: 0; left: 0;
-      width: 100%;
-      background: #f2f2f2;
+
+    .hidden-menu {
+      display: none;
+      margin-top: 40px;
+    }
+    .hidden-menu button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #4285f4;
+      color: white;
+    }
+    .hidden-menu button:hover {
+      background: #3367d6;
+    }
+
+    .sub-menu {
+      margin-top: 10px;
+      display: none;
+    }
+    .sub-menu button {
+      background: #34a853;
+    }
+    .sub-menu button:hover {
+      background: #0f9d58;
+    }
+
+    iframe {
+      width: 90%;
+      height: 500px;
+      margin: 30px auto;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      display: none;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div>
-      <a href="#">About</a>
-      <a href="#">Store</a>
-    </div>
-    <div>
-      <a href="#">Gmail</a>
-      <a href="#">Images</a>
-      <a href="#">Login</a>
-    </div>
-  </header>
+  <!-- Google風ロゴ -->
+  <div class="logo">
+    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
+  </div>
 
-  <div class="main" id="main">
-    <div class="logo">Googlo</div>
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="検索またはURLを入力">
-    </div>
-    <div class="buttons">
-      <button onclick="handleSearch()">検索</button>
-      <button onclick="alert('Luckyは準備中')">I'm Feeling Lucky</button>
+  <!-- 検索フォーム -->
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Google 検索">
+  </div>
+  <button class="search-btn" onclick="search()">Google 検索</button>
+
+  <!-- 隠しメニュー -->
+  <div class="hidden-menu" id="hiddenMenu">
+    <button onclick="openSite('https://himachat.jp/')">チャット</button>
+    <button onclick="openSite('https://khp.jp/konamikan/4/')">DM</button>
+    <button onclick="toggleSubMenu()">その他</button>
+    <div class="sub-menu" id="subMenu">
+      <button onclick="openSite('https://example.com')">サイトA</button>
+      <button onclick="openSite('https://example.com')">サイトB</button>
+      <button onclick="openSite('https://example.com')">サイトC</button>
     </div>
   </div>
 
-  <div class="iframe-container" id="iframeContainer">
-    <div class="menu" id="menu">
-      <button onclick="loadSite('https://himachat.jp/')">ヒマチャット</button>
-      <button onclick="loadSite('https://khp.jp/konamikan/4/')">ヒマチャット規制対策<button>
-      <button onclick="showProxyMenu()">開発中...</button>
-      <button onclick="goBack()">戻る</button>
-    </div>
-    <div class="menu" id="proxyMenu" style="display:none;">
-      <button onclick="loadSite('https://proxy-a.example.com')">プロキシA</button>
-      <button onclick="loadSite('https://proxy-b.example.com')">プロキシB</button>
-      <button onclick="loadSite('https://proxy-c.example.com')">プロキシC</button>
-      <button onclick="showMainMenu()">戻る</button>
-    </div>
-    <iframe id="frame"></iframe>
-  </div>
-
-  <footer>
-    <div>
-      <a href="#">広告</a>
-      <a href="#">ビジネス</a>
-    </div>
-    <div>
-      <a href="#">プライバシー</a>
-      <a href="#">利用規約</a>
-    </div>
-  </footer>
+  <!-- iframe -->
+  <iframe id="iframeArea"></iframe>
 
   <script>
-    function handleSearch() {
-      const value = document.getElementById("searchInput").value.trim();
-      if (value === "roguinn") {
-        document.getElementById("main").style.display = "none";
-        document.querySelector("header").style.display = "none";
-        document.querySelector("footer").style.display = "none";
-        document.getElementById("iframeContainer").style.display = "flex";
+    function search() {
+      const query = document.getElementById("search").value.trim();
+      if (query.toLowerCase() === "roguinn") {
+        document.getElementById("hiddenMenu").style.display = "block";
       } else {
-        window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(value);
+        alert("検索結果はありません");
       }
     }
-    function loadSite(url) {
-      document.getElementById("frame").src = url;
+
+    function openSite(url) {
+      const iframe = document.getElementById("iframeArea");
+      iframe.src = url;
+      iframe.style.display = "block";
     }
-    function goBack() {
-      document.getElementById("iframeContainer").style.display = "none";
-      document.getElementById("main").style.display = "flex";
-      document.querySelector("header").style.display = "flex";
-      document.querySelector("footer").style.display = "flex";
-      document.getElementById("frame").src = "";
-      showMainMenu();
-    }
-    function showProxyMenu() {
-      document.getElementById("menu").style.display = "none";
-      document.getElementById("proxyMenu").style.display = "flex";
-    }
-    function showMainMenu() {
-      document.getElementById("proxyMenu").style.display = "none";
-      document.getElementById("menu").style.display = "flex";
+
+    function toggleSubMenu() {
+      const sub = document.getElementById("subMenu");
+      sub.style.display = (sub.style.display === "block") ? "none" : "block";
     }
   </script>
 </body>
