@@ -4,143 +4,205 @@
   <meta charset="UTF-8">
   <title>Google</title>
   <link rel="icon" href="https://www.google.com/favicon.ico">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: 'Roboto', sans-serif;
+      height: 100%;
+      background-color: #fff;
+    }
+
+    header, footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      font-size: 14px;
       background: #fff;
       color: #202124;
-      text-align: center;
     }
+
+    .header-left a, .header-right a, .footer-left a, .footer-right a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #202124;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 120px);
+    }
+
     .logo {
-      margin-top: 120px;
-      font-size: 80px;
-      font-weight: bold;
-      color: #4285f4;
+      margin-bottom: 30px;
     }
-    .logo span:nth-child(2) { color: #ea4335; }
-    .logo span:nth-child(3) { color: #fbbc05; }
-    .logo span:nth-child(4) { color: #4285f4; }
-    .logo span:nth-child(5) { color: #34a853; }
-    .logo span:nth-child(6) { color: #ea4335; }
 
     .search-box {
-      margin: 30px auto;
-      width: 90%;
-      max-width: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .search-input-container {
       display: flex;
       align-items: center;
       border: 1px solid #dfe1e5;
       border-radius: 24px;
-      padding: 5px 15px;
-      box-shadow: none;
+      padding: 0 14px;
+      width: 560px;
     }
-    .search-box input {
-      flex: 1;
+
+    .search-input-container input {
+      flex-grow: 1;
+      padding: 14px 10px;
+      font-size: 16px;
       border: none;
       outline: none;
-      font-size: 16px;
-      padding: 10px;
     }
-    .search-btn {
+
+    .search-buttons {
       margin-top: 20px;
-      padding: 10px 20px;
+    }
+
+    .search-buttons button {
+      padding: 10px 16px;
+      margin: 5px;
       font-size: 14px;
+      background-color: #f8f9fa;
       border: 1px solid #f8f9fa;
       border-radius: 4px;
-      background: #f8f9fa;
       cursor: pointer;
     }
-    .search-btn:hover {
-      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+
+    .iframe-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: white;
+      flex-direction: column;
+      z-index: 999;
     }
 
-    .hidden-menu {
-      display: none;
-      margin-top: 40px;
+    .iframe-toolbar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      background-color: #f1f1f1;
     }
-    .hidden-menu button {
-      margin: 5px;
-      padding: 10px 20px;
+
+    .iframe-toolbar button {
+      padding: 8px 16px;
       font-size: 14px;
-      border-radius: 8px;
-      border: none;
       cursor: pointer;
-      background: #4285f4;
-      color: white;
-    }
-    .hidden-menu button:hover {
-      background: #3367d6;
-    }
-
-    .sub-menu {
-      margin-top: 10px;
-      display: none;
-    }
-    .sub-menu button {
-      background: #34a853;
-    }
-    .sub-menu button:hover {
-      background: #0f9d58;
     }
 
     iframe {
-      width: 90%;
-      height: 500px;
-      margin: 30px auto;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      display: none;
+      flex-grow: 1;
+      border: none;
+      width: 100%;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #f2f2f2;
     }
   </style>
 </head>
 <body>
-  <!-- Google風ロゴ -->
-  <div class="logo">
-    <span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span>
-  </div>
+  <header>
+    <div class="header-left">
+      <a href="https://about.google/">Googleについて</a>
+      <a href="https://store.google.com/">ストア</a>
+    </div>
+    <div class="header-right">
+      <a href="https://mail.google.com/">Gmail</a>
+      <a href="https://www.google.co.jp/imghp">画像</a>
+      <a href="https://www.google.co.jp/preferences">設定</a>
+      <a href="https://accounts.google.com/ServiceLogin">ログイン</a>
+    </div>
+  </header>
 
-  <!-- 検索フォーム -->
-  <div class="search-box">
-    <input type="text" id="search" placeholder="Google 検索">
-  </div>
-  <button class="search-btn" onclick="search()">Google 検索</button>
-
-  <!-- 隠しメニュー -->
-  <div class="hidden-menu" id="hiddenMenu">
-    <button onclick="openSite('https://himachat.jp/')">チャット</button>
-    <button onclick="openSite('https://khp.jp/konamikan/4/')">DM</button>
-    <button onclick="toggleSubMenu()">その他</button>
-    <div class="sub-menu" id="subMenu">
-      <button onclick="openSite('https://example.com')">サイトA</button>
-      <button onclick="openSite('https://example.com')">サイトB</button>
-      <button onclick="openSite('https://example.com')">サイトC</button>
+  <div class="main-content" id="mainContent">
+    <div class="logo">
+      <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google">
+    </div>
+    <div class="search-box">
+      <div class="search-input-container">
+        <input type="text" id="searchInput" placeholder="Google 検索または URL を入力" autocomplete="off">
+      </div>
+    </div>
+    <div class="search-buttons">
+      <button onclick="handleSearch()">Google 検索</button>
+      <button onclick="alert('準備中')">I'm Feeling Lucky</button>
     </div>
   </div>
 
-  <!-- iframe -->
-  <iframe id="iframeArea"></iframe>
+  <div class="iframe-container" id="iframeContainer">
+    <div class="iframe-toolbar">
+      <button onclick="loadSite('https://himachat.jp/')">チャット</button>
+      <button onclick="loadSite('https://khp.jp/konamikan/4/')">DM</button>
+      <button onclick="loadSite('https://example.com')">その他A</button>
+      <button onclick="loadSite('https://example.com')">その他B</button>
+      <button onclick="loadSite('https://example.com')">その他C</button>
+      <button onclick="goBack()">戻る</button>
+    </div>
+    <iframe id="embeddedFrame" src=""></iframe>
+  </div>
+
+  <footer>
+    <div class="footer-left"><a href="#">日本</a></div>
+    <div class="footer-right">
+      <a href="https://ads.google.com/">広告</a>
+      <a href="https://smallbusiness.withgoogle.com/">ビジネス</a>
+      <a href="https://www.google.com/search/howsearchworks/">検索の仕組み</a>
+      <a href="https://policies.google.com/privacy">プライバシー</a>
+      <a href="https://policies.google.com/terms">規約</a>
+    </div>
+  </footer>
 
   <script>
-    function search() {
-      const query = document.getElementById("search").value.trim();
-      if (query.toLowerCase() === "roguinn") {
-        document.getElementById("hiddenMenu").style.display = "block";
+    function handleSearch() {
+      const input = document.getElementById("searchInput");
+      const value = input.value.trim();
+      input.value = "";
+
+      if (value === "roguinn") {
+        openIframe("https://himachat.jp/");
       } else {
-        alert("検索結果はありません");
+        window.location.href = "https://www.google.com/search?q=" + encodeURIComponent(value);
       }
     }
 
-    function openSite(url) {
-      const iframe = document.getElementById("iframeArea");
-      iframe.src = url;
-      iframe.style.display = "block";
+    function openIframe(defaultUrl) {
+      document.getElementById("mainContent").style.display = "none";
+      document.querySelector("header").style.display = "none";
+      document.querySelector("footer").style.display = "none";
+      document.getElementById("iframeContainer").style.display = "flex";
+      document.getElementById("embeddedFrame").src = defaultUrl;
     }
 
-    function toggleSubMenu() {
-      const sub = document.getElementById("subMenu");
-      sub.style.display = (sub.style.display === "block") ? "none" : "block";
+    function loadSite(url) {
+      document.getElementById("embeddedFrame").src = url;
+    }
+
+    function goBack() {
+      document.getElementById("iframeContainer").style.display = "none";
+      document.getElementById("mainContent").style.display = "flex";
+      document.querySelector("header").style.display = "flex";
+      document.querySelector("footer").style.display = "flex";
     }
   </script>
 </body>
