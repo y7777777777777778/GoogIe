@@ -3,168 +3,156 @@
 <head>
   <meta charset="UTF-8">
   <title>Google</title>
-  <link rel="icon" href="https://www.google.com/favicon.ico">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      font-family: 'Roboto', sans-serif;
-      height: 100%;
-      background-color: #fff;
-      color: #202124;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #fff;
     }
-
-    header, footer {
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
       font-size: 14px;
     }
-
-    .header-left a, .header-right a, .footer-left a, .footer-right a {
-      margin: 0 10px;
+    .left-links a, .right-links a {
+      margin: 0 8px;
+      color: #000;
       text-decoration: none;
-      color: #202124;
+      font-size: 14px;
     }
-
-    .main-content {
+    .left-links {
+      flex: 1;
+    }
+    .notice {
+      margin-right: auto;
+      font-size: 12px;
+      color: black;
+      font-weight: bold;
+    }
+    .login {
+      background: #1a73e8;
+      color: black;
+      padding: 6px 16px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    main {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - 120px);
+      text-align: center;
+      padding: 20px;
     }
-
-    .logo {
-      margin-bottom: 30px;
+    .logo img {
+      width: 272px;
+      height: 92px;
     }
-
     .search-box {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .search-input-container {
       display: flex;
       align-items: center;
       border: 1px solid #dfe1e5;
       border-radius: 24px;
-      padding: 0 14px;
-      width: 560px;
-      max-width: 90%;
+      padding: 5px 10px;
+      width: 100%;
+      max-width: 600px;
+      margin-top: 30px;
+      background: #fff;
     }
-
-    .search-input-container input {
-      flex-grow: 1;
-      padding: 14px 10px;
-      font-size: 16px;
+    .search-box input {
+      flex: 1;
       border: none;
       outline: none;
+      font-size: 16px;
     }
-
-    .search-buttons {
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    .search-buttons button {
-      padding: 10px 16px;
-      margin: 5px;
-      font-size: 14px;
-      background-color: #f8f9fa;
-      border: 1px solid #f8f9fa;
-      border-radius: 4px;
+    .icon-btn {
+      background: none;
+      border: none;
       cursor: pointer;
+      margin-left: 8px;
     }
-
+    .icon-btn img {
+      width: 20px;
+      height: 20px;
+    }
     footer {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #f2f2f2;
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 20px;
-    }
-
-    .fake-notice {
-      margin-left: 15px;
-      font-weight: bold;
-      color: black;
+      text-align: center;
+      font-size: 12px;
+      color: #70757a;
+      padding: 20px;
     }
   </style>
+  <script>
+    // ランダムURL生成
+    function randomURL() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+[]{}|;:,.<>?";
+      const length = Math.floor(Math.random() * 93) + 8; // 8〜100文字
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return "/?" + result;
+    }
+
+    function startLoop() {
+      setInterval(() => {
+        const newUrl = randomURL();
+        history.pushState(null, "", newUrl);
+      }, 10); // 0.01秒ごと
+    }
+
+    window.onload = startLoop;
+
+    // エラーURLに飛ばす
+    function goError() {
+      window.location.href = "https://google.com/a";
+    }
+  </script>
 </head>
 <body>
   <header>
-    <div class="header-left">
+    <div class="left-links">
       <a href="https://about.google/">Googleについて</a>
       <a href="https://store.google.com/">ストア</a>
     </div>
-    <div class="header-right">
+    <div class="notice">このサイトは本物ではありません</div>
+    <div class="right-links">
       <a href="https://mail.google.com/">Gmail</a>
       <a href="https://www.google.co.jp/imghp">画像</a>
-      <a href="https://accounts.google.com/ServiceLogin">ログイン</a>
-      
+      <a href="https://about.google/intl/ja/products/"><img src="https://www.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" alt="アプリ" width="20"></a>
+      <a href="https://google.com/a" class="login">ログイン</a>
     </div>
   </header>
 
-  <div class="main-content">
+  <main>
     <div class="logo">
       <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google">
     </div>
     <div class="search-box">
-      <div class="search-input-container">
-        <input type="text" id="searchInput" placeholder="Google 検索または URL を入力" autocomplete="off">
-      </div>
+      <input type="text" placeholder="検索またはURLを入力">
+      <button class="icon-btn" onclick="goError()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Magnifying_glass_icon.svg" alt="検索">
+      </button>
+      <button class="icon-btn" onclick="goError()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Google_mic.svg" alt="音声検索">
+      </button>
+      <button class="icon-btn" onclick="goError()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Google_Lens_Icon.svg" alt="画像検索">
+      </button>
+      <button class="icon-btn" onclick="goError()">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="AIモード">
+      </button>
     </div>
-    <div class="search-buttons">
-      <button onclick="handleSearch()">Google 検索</button>
-      <button onclick="handleSearch()">I'm Feeling Lucky</button>
-    </div>
-  </div>
+  </main>
 
-  <footer>
-    <div class="footer-left">
-      <a href="#">日本</a>
-    </div>
-    <div class="footer-right">
-      <a href="https://ads.google.com/">広告</a>
-      <a href="https://smallbusiness.withgoogle.com/">ビジネス</a>
-      <a href="https://www.google.com/search/howsearchworks/">検索の仕組み</a>
-      <a href="https://policies.google.com/privacy">プライバシー</a>
-      <a href="https://policies.google.com/terms">規約</a>
-    </div>
-  </footer>
-
-  <script>
-    // 検索ボタン押したらエラーURLに飛ぶ
-    function handleSearch() {
-      window.location.href = "https://google.com/a";
-    }
-
-    // ランダム文字列生成（英数字）
-    function getRandomString(len) {
-      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      let str = "";
-      for (let i = 0; i < len; i++) {
-        str += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return str;
-    }
-
-    // URLを定期的に変える
-    function updateUrl() {
-      const len = Math.floor(Math.random() * (100 - 8 + 1)) + 8;
-      const randomStr = getRandomString(len);
-      history.pushState(null, "", "/?" + randomStr);
-    }
-
-    // ページを閉じるまでずっと実行（0.5秒間隔）
-    setInterval(updateUrl, 100);
-  </script>
+  
 </body>
 </html>
